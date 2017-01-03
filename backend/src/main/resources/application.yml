@@ -1,0 +1,2 @@
+stripe.secret.key: # Put Stripe test secret key here
+stripe.publishable.key: # Put Stripe test publishable key here

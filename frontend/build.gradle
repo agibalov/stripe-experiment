@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.moowork.gradle:gradle-node-plugin:0.13'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.moowork.node'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+node {
+    version = '7.2.1'
+    npmVersion = '3.10.10'
+    download = true
+
+    workDir = file("${project.projectDir}/nodejs")
+    nodeModulesDir = file("${project.projectDir}")
+}
+
+clean {
+    delete 'dist'
+}
+
+jar {
+    into('resources') {
+        from('dist') {
+            include 'bundle.js'
+        }
+        from('src') {
+            include 'index.html'
+        }
+    }
+
+    dependsOn 'webpack'
+}
+
+task webpack(type: NpmTask, dependsOn: 'npmInstall') {
+    args = ['run-script', 'gradle_build']
+}

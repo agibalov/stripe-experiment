@@ -1,0 +1,3 @@
+rootProject.name = 'stripe-experiment'
+include 'backend'
+include 'frontend'
