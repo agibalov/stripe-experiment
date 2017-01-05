@@ -5,7 +5,8 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gradle_build": "node_modules/.bin/webpack"
+    "start": "webpack-dev-server --port 9090 --history-api-fallback --content-base ./src",
+    "gradle_build": "webpack"
   },
   "author": "",
   "license": "ISC",

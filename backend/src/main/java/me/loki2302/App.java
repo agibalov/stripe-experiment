@@ -28,6 +28,7 @@ public class App {
     private StripeService stripeService;
 
     @RestController
+    @RequestMapping("/api")
     public static class DummyController {
         private final static Logger LOGGER = LoggerFactory.getLogger(DummyController.class);
 

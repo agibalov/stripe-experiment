@@ -10,10 +10,17 @@ interface Config {
 @Component({
     selector: 'app',
     template: `
-<div>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Dummy</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
     <button type="button" (click)="deploy()">Deploy</button>
     <button type="button" (click)="undeploy()">Undeploy</button>
-    <button type="button" (click)="subscribe()">Subscribe</button>    
+    <button type="button" (click)="subscribe()">Subscribe</button>
 </div>
 `
 })
@@ -22,7 +29,7 @@ class AppComponent implements OnInit {
     }
 
     async ngOnInit(): Promise<void> {
-        const response = await this.http.get('/config').toPromise();
+        const response = await this.http.get('/api/config').toPromise();
         const config = <Config>response.json();
         var stripePublishableKey = config.stripePublishableKey;
         console.log(`Got stripePublishableKey=${stripePublishableKey}`);
@@ -30,12 +37,12 @@ class AppComponent implements OnInit {
     }
 
     async deploy(): Promise<void> {
-        const response = await this.http.post('/deploy', null).toPromise();
+        const response = await this.http.post('/api/deploy', null).toPromise();
         console.log(response);
     }
 
     async undeploy(): Promise<void> {
-        const response = await this.http.post('/undeploy', null).toPromise();
+        const response = await this.http.post('/api/undeploy', null).toPromise();
         console.log(response);
     }
 
@@ -51,7 +58,7 @@ class AppComponent implements OnInit {
             if(status == 200) {
                 const token = response.id;
 
-                const response2 = await this.http.post('/signup', {
+                const response2 = await this.http.post('/api/signup', {
                     token: token
                 }).toPromise();
                 console.log(response2);
