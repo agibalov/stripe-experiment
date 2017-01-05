@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -24,8 +27,14 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
-    @Autowired
-    private StripeService stripeService;
+    @Bean
+    public FilterRegistrationBean rewriteFilterConfig() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setName("rewriteFilter");
+        filterRegistrationBean.setFilter(new UrlRewriteFilter());
+        filterRegistrationBean.addInitParameter("confPath", "urlrewrite.xml");
+        return filterRegistrationBean;
+    }
 
     @RestController
     @RequestMapping("/api")

@@ -23,5 +23,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile group: 'com.stripe', name: 'stripe-java', version: '3.5.0'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    compile group: 'org.tuckey', name: 'urlrewritefilter', version: '4.0.4'
     compile project(':frontend')
 }
