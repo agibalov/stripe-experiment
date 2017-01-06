@@ -7,6 +7,7 @@ import {AppComponent} from "./app.component";
 import {SignInPageComponent} from "./sign-in-page.component";
 import {SignUpPageComponent} from "./sign-up-page.component";
 import {NotFoundPageComponent} from "./not-found-page.component";
+import {FormsModule} from "@angular/forms";
 
 const appRoutes: Routes = [
     { path: '', component: HomePageComponent },
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
     imports: [
         BrowserModule,
         HttpModule,
+        FormsModule,
         RouterModule.forRoot(appRoutes)
     ],
     declarations: [

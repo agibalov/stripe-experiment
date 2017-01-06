@@ -7,7 +7,8 @@ interface Config {
 
 @Component({
     template: `
-<h1>I am home page component</h1>
+<h1>Home</h1>
+
 <button type="button" (click)="deploy()" class="btn btn-default">Deploy</button>
 <button type="button" (click)="undeploy()" class="btn btn-default">Undeploy</button>
 <button type="button" (click)="subscribe()" class="btn btn-default">Subscribe</button>
