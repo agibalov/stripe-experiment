@@ -47,12 +47,12 @@ import {StripeService} from "./stripe.service";
 })
 export class SignUpPageComponent {
     wip: boolean;
-    email: String = '';
-    plan: String = 'free';
-    card: String = '4242424242424242';
+    email: string = '';
+    plan: string = 'free';
+    card: string = '4242424242424242';
     expMonth: number = 12;
     expYear: number = 2018;
-    cvc: String = '123';
+    cvc: string = '123';
 
     constructor(
         private http: Http,
