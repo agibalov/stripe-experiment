@@ -11,7 +11,8 @@ module.exports = {
         loaders: [
             {
                 test: /\.ts$/,
-                loader: 'babel?presets[]=es2015!ts',
+                //loader: 'babel?presets[]=es2015!ts',
+                loader: 'ts',
                 exclude: /node_modules/
             },
             { test: /\.html$/, loader: 'raw' },

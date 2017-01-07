@@ -1,6 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
 
-import 'babel-polyfill';
 import 'zone.js/dist/zone';
 import 'reflect-metadata';
 import 'rxjs/Rx'; // needed for http.get(...).toPromise()
