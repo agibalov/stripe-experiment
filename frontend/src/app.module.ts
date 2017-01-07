@@ -8,11 +8,13 @@ import {SignInPageComponent} from "./sign-in-page.component";
 import {SignUpPageComponent} from "./sign-up-page.component";
 import {NotFoundPageComponent} from "./not-found-page.component";
 import {FormsModule} from "@angular/forms";
+import {AccountPageComponent} from "./account-page.component";
 
 const appRoutes: Routes = [
     { path: '', component: HomePageComponent },
     { path: 'sign-in', component: SignInPageComponent },
     { path: 'sign-up', component: SignUpPageComponent },
+    { path: 'account', component: AccountPageComponent },
     { path: '**', component: NotFoundPageComponent }
 ];
 
@@ -28,6 +30,7 @@ const appRoutes: Routes = [
         HomePageComponent,
         SignInPageComponent,
         SignUpPageComponent,
+        AccountPageComponent,
         NotFoundPageComponent
     ],
     providers: [ ],

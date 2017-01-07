@@ -118,6 +118,16 @@ public class DummyController {
         SecurityContextHolder.clearContext();
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(path = "/me")
+    public ResponseEntity getMe() {
+        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByEmail(email);
+        MeDto meDto = new MeDto();
+        meDto.email = user.email;
+        return ResponseEntity.ok(meDto);
+    }
+
     @GetMapping(path = "/insecure")
     public String insecure() {
         return "I am insecure";

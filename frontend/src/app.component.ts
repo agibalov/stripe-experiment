@@ -14,6 +14,7 @@ import {Http, Response} from "@angular/http";
                 <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['']">Home</a></li>
                 <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['sign-in']">Sign In</a></li>
                 <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['sign-up']">Sign Up</a></li>
+                <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['account']">Account</a></li>
             </ul>
             <form class="navbar-form navbar-right" (ngSubmit)="signOut()">
                 <fieldset [disabled]="wip">
