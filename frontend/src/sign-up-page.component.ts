@@ -14,13 +14,13 @@ import {StripeService} from "./stripe.service";
         </div>
         <div class="radio">
             <label>
-                <input type="radio" name="plan" [(ngModel)]="plan" [value]="'free'" checked>
+                <input type="radio" name="plan" [(ngModel)]="plan" [value]="'plan-free'" checked>
                 Free
             </label>
         </div>
         <div class="radio">
             <label>
-                <input type="radio" name="plan" [(ngModel)]="plan" [value]="'elite'" checked>
+                <input type="radio" name="plan" [(ngModel)]="plan" [value]="'plan-elite'" checked>
                 Elite
             </label>
         </div>
@@ -48,7 +48,7 @@ import {StripeService} from "./stripe.service";
 export class SignUpPageComponent {
     wip: boolean;
     email: string = '';
-    plan: string = 'free';
+    plan: string = 'plan-elite';
     card: string = '4242424242424242';
     expMonth: number = 12;
     expYear: number = 2018;
@@ -69,7 +69,7 @@ export class SignUpPageComponent {
                 cvc: this.cvc
             });
 
-            const response = await this.http.post('/api/sign-up2', {
+            const response = await this.http.post('/api/sign-up', {
                 email: this.email,
                 token: token,
                 plan: this.plan

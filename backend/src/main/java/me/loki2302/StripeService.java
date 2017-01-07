@@ -93,7 +93,7 @@ public class StripeService {
             customerParameters.put("email", email);
             //customerParameters.put("source", source);
             Customer customer = Customer.create(customerParameters);
-            LOGGER.info("Created a customer: {}", customer);
+            LOGGER.info("Created a customer for {}: {})", email, customer);
 
             return customer.getId();
         } catch(Exception e) {

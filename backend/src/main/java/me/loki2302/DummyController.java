@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -50,17 +49,6 @@ public class DummyController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(path = "/signup")
-    public ResponseEntity signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
-        LOGGER.info("Got sign-up request! token={}", signUpRequestDto.token);
-
-        String customerId = stripeService.createCustomer("andrey.agibalov@gmail.com");
-        stripeService.setCustomerSource(customerId, signUpRequestDto.token);
-        stripeService.subscribeCustomerToPlan("plan-elite", customerId);
-
-        return ResponseEntity.ok().build();
-    }
-
     @RequestMapping("/webhook")
     public ResponseEntity webhook(@RequestBody String json) throws CardException, APIException, AuthenticationException, InvalidRequestException, APIConnectionException {
         Event event = APIResource.GSON.fromJson(json, Event.class);
@@ -71,7 +59,7 @@ public class DummyController {
     }
 
     @PostMapping(path = "/sign-in")
-    public ResponseEntity signIn(@Valid @RequestBody AppSignInRequestDto requestDto) {
+    public ResponseEntity signIn(@Valid @RequestBody SignInRequestDto requestDto) {
         LOGGER.info("Got sign-in request, email={}", requestDto.email);
 
         String email = requestDto.email;
@@ -89,8 +77,8 @@ public class DummyController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(path = "/sign-up2")
-    public ResponseEntity signUp2(@Valid @RequestBody AppSignUpRequestDto requestDto) {
+    @PostMapping(path = "/sign-up")
+    public ResponseEntity signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
         LOGGER.info("Got sign-up request, email={}, token={}, plan={}", requestDto.email, requestDto.token, requestDto.plan);
 
         String email = requestDto.email;
@@ -99,8 +87,13 @@ public class DummyController {
             return ResponseEntity.badRequest().body("User already registered");
         }
 
+        String stripeCustomerId = stripeService.createCustomer("andrey.agibalov@gmail.com");
+        stripeService.setCustomerSource(stripeCustomerId, requestDto.token);
+        stripeService.subscribeCustomerToPlan(requestDto.plan, stripeCustomerId);
+
         user = new User();
         user.email = email;
+        user.stripeCustomerId = stripeCustomerId;
         user = userRepository.save(user);
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
@@ -125,18 +118,7 @@ public class DummyController {
         User user = userRepository.findByEmail(email);
         MeDto meDto = new MeDto();
         meDto.email = user.email;
+        meDto.stripeCustomerId = user.stripeCustomerId;
         return ResponseEntity.ok(meDto);
-    }
-
-    @GetMapping(path = "/insecure")
-    public String insecure() {
-        return "I am insecure";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping(path = "/secure")
-    public String secure() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return "I am secure: " + authentication.getPrincipal();
     }
 }

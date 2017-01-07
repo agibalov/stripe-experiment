@@ -10,4 +10,5 @@ public class User {
     @GeneratedValue
     public Long id;
     public String email;
+    public String stripeCustomerId;
 }
