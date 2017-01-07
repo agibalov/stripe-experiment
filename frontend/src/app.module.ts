@@ -9,6 +9,7 @@ import {SignUpPageComponent} from "./sign-up-page.component";
 import {NotFoundPageComponent} from "./not-found-page.component";
 import {FormsModule} from "@angular/forms";
 import {AccountPageComponent} from "./account-page.component";
+import {StripeService} from "./stripe.service";
 
 const appRoutes: Routes = [
     { path: '', component: HomePageComponent },
@@ -33,7 +34,9 @@ const appRoutes: Routes = [
         AccountPageComponent,
         NotFoundPageComponent
     ],
-    providers: [ ],
+    providers: [
+        StripeService
+    ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule {

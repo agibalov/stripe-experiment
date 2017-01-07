@@ -1,9 +1,6 @@
 import {Http} from "@angular/http";
-import {OnInit, Component} from "@angular/core";
-
-interface Config {
-    stripePublishableKey: string;
-}
+import {Component} from "@angular/core";
+import {StripeService} from "./stripe.service";
 
 @Component({
     template: `
@@ -14,16 +11,8 @@ interface Config {
 <button type="button" (click)="subscribe()" class="btn btn-default">Subscribe</button>
 `
 })
-export class HomePageComponent implements OnInit {
-    constructor(private http: Http) {
-    }
-
-    async ngOnInit(): Promise<void> {
-        const response = await this.http.get('/api/config').toPromise();
-        const config = <Config>response.json();
-        var stripePublishableKey = config.stripePublishableKey;
-        console.log(`Got stripePublishableKey=${stripePublishableKey}`);
-        Stripe.setPublishableKey(stripePublishableKey);
+export class HomePageComponent /*implements OnInit*/ {
+    constructor(private http: Http, private stripeService: StripeService) {
     }
 
     async deploy(): Promise<void> {
@@ -36,23 +25,18 @@ export class HomePageComponent implements OnInit {
         console.log(response);
     }
 
-    subscribe(): void {
-        // https://stripe.com/docs/testing#cards
-        Stripe.card.createToken({
+    async subscribe(): Promise<void> {
+        // Test cards here: https://stripe.com/docs/testing#cards
+        const token = this.stripeService.createToken({
             number: '4242424242424242',
             exp_month: 12,
             exp_year: 2018,
             cvc: '123'
-        }, async(status: number, response: StripeTokenResponse) => {
-            console.log(status, response);
-            if (status == 200) {
-                const token = response.id;
-
-                const response2 = await this.http.post('/api/signup', {
-                    token: token
-                }).toPromise();
-                console.log(response2);
-            }
         });
+
+        const response = await this.http.post('/api/signup', {
+            token: token
+        }).toPromise();
+        console.log(response);
     }
 }

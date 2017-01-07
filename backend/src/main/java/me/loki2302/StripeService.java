@@ -74,7 +74,7 @@ public class StripeService {
         }
     }
 
-    public String createCustomer() {
+    public String createCustomer(String email) {
         try {
             // for testing only:
             /*Map<String, Object> source = new HashMap<>();
@@ -90,7 +90,7 @@ public class StripeService {
             // see https://stripe.com/docs
 
             Map<String, Object> customerParameters = new HashMap<>();
-            customerParameters.put("email", "andrey.agibalov@gmail.com");
+            customerParameters.put("email", email);
             //customerParameters.put("source", source);
             Customer customer = Customer.create(customerParameters);
             LOGGER.info("Created a customer: {}", customer);

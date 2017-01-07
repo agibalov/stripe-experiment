@@ -9,5 +9,8 @@ public class AppSignUpRequestDto {
     public String email;
 
     @NotEmpty
+    public String token;
+
+    @NotEmpty
     public String plan;
 }

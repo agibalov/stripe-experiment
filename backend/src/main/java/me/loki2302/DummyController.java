@@ -54,7 +54,7 @@ public class DummyController {
     public ResponseEntity signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
         LOGGER.info("Got sign-up request! token={}", signUpRequestDto.token);
 
-        String customerId = stripeService.createCustomer();
+        String customerId = stripeService.createCustomer("andrey.agibalov@gmail.com");
         stripeService.setCustomerSource(customerId, signUpRequestDto.token);
         stripeService.subscribeCustomerToPlan("plan-elite", customerId);
 
@@ -91,7 +91,7 @@ public class DummyController {
 
     @PostMapping(path = "/sign-up2")
     public ResponseEntity signUp2(@Valid @RequestBody AppSignUpRequestDto requestDto) {
-        LOGGER.info("Got sign-up request, email={}, plan={}", requestDto.email, requestDto.plan);
+        LOGGER.info("Got sign-up request, email={}, token={}, plan={}", requestDto.email, requestDto.token, requestDto.plan);
 
         String email = requestDto.email;
         User user = userRepository.findByEmail(email);
