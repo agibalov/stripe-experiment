@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
-import {Http, Response} from "@angular/http";
 import {StripeService} from "./stripe.service";
+import {Router} from "@angular/router";
+import {AuthenticationService} from "./authentication.service";
 
 @Component({
     template: `
@@ -55,7 +56,8 @@ export class SignUpPageComponent {
     cvc: string = '123';
 
     constructor(
-        private http: Http,
+        private router: Router,
+        private authenticationService: AuthenticationService,
         private stripeService: StripeService) {
     }
 
@@ -69,19 +71,13 @@ export class SignUpPageComponent {
                 cvc: this.cvc
             });
 
-            const response = await this.http.post('/api/sign-up', {
+            await this.authenticationService.signUp({
                 email: this.email,
                 token: token,
                 plan: this.plan
-            }).toPromise();
-            console.log('Got successful response', response);
-        } catch(e) {
-            if (e instanceof Response) {
-                const response = <Response>e;
-                console.log('Got error response', response.status);
-            } else {
-                throw e;
-            }
+            });
+
+            this.router.navigate(['/account']);
         } finally {
             this.wip = false;
         }

@@ -1,10 +1,6 @@
-import {Component, OnInit} from "@angular/core";
-import {Http, Response} from "@angular/http";
-
-export interface MeDto {
-    email: string;
-    stripeCustomerId: string;
-};
+import {Component, OnInit, Injectable} from "@angular/core";
+import {ActivatedRoute} from "@angular/router";
+import {MeDto} from "./account-resolver.service";
 
 @Component({
     template: `
@@ -17,24 +13,19 @@ export class AccountPageComponent implements OnInit {
     email: string = '';
     stripeCustomerId: string = '';
 
-    constructor(private http: Http) {
+    constructor(private route: ActivatedRoute) {
     }
 
     async ngOnInit(): Promise<void> {
-        try {
-            const response = await this.http.get('/api/me').toPromise();
-            console.log('Got successful response', response);
+        this.route.data.subscribe((data: { meDto: MeDto }) => {
+            this.email = data.meDto.email;
+            this.stripeCustomerId = data.meDto.stripeCustomerId;
+        });
 
-            const meDto = <MeDto>response.json();
-            this.email = meDto.email;
-            this.stripeCustomerId = meDto.stripeCustomerId;
-        } catch(e) {
-            if (e instanceof Response) {
-                const response = <Response>e;
-                console.log('Got error response', response.status);
-            } else {
-                throw e;
-            }
-        }
+        /*
+        // why does this not work?
+        const data = await this.route.data.toPromise();
+        console.log('data');
+        */
     }
 }

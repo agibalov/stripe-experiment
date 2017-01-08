@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
-import {Http, Response} from "@angular/http";
+import {Router} from "@angular/router";
+import {AuthenticationService} from "./authentication.service";
 
 @Component({
     template: `
@@ -18,28 +19,21 @@ import {Http, Response} from "@angular/http";
 })
 export class SignInPageComponent {
     wip: boolean;
-    email: String = '';
+    email: string = '';
 
-    constructor(private http: Http) {
+    constructor(
+        private authenticationService: AuthenticationService,
+        private router: Router) {
     }
 
     async signIn(): Promise<void> {
         this.wip = true;
         try {
-            console.log({
+            await this.authenticationService.signIn({
                 email: this.email
             });
-            const response = await this.http.post('/api/sign-in', {
-                email: this.email
-            }).toPromise();
-            console.log('Got successful response', response);
-        } catch(e) {
-            if (e instanceof Response) {
-                const response = <Response>e;
-                console.log('Got error response', response.status);
-            } else {
-                throw e;
-            }
+
+            this.router.navigate(['/account']);
         } finally {
             this.wip = false;
         }

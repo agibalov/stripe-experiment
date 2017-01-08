@@ -10,12 +10,20 @@ import {NotFoundPageComponent} from "./not-found-page.component";
 import {FormsModule} from "@angular/forms";
 import {AccountPageComponent} from "./account-page.component";
 import {StripeService} from "./stripe.service";
+import {AuthenticationService} from "./authentication.service";
+import {AccountResolver} from "./account-resolver.service";
 
 const appRoutes: Routes = [
     { path: '', component: HomePageComponent },
     { path: 'sign-in', component: SignInPageComponent },
     { path: 'sign-up', component: SignUpPageComponent },
-    { path: 'account', component: AccountPageComponent },
+    {
+        path: 'account',
+        component: AccountPageComponent,
+        resolve: {
+            meDto: AccountResolver
+        }
+    },
     { path: '**', component: NotFoundPageComponent }
 ];
 
@@ -35,7 +43,9 @@ const appRoutes: Routes = [
         NotFoundPageComponent
     ],
     providers: [
-        StripeService
+        StripeService,
+        AuthenticationService,
+        AccountResolver
     ],
     bootstrap: [ AppComponent ]
 })

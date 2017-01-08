@@ -1,5 +1,6 @@
-import {Component} from "@angular/core";
-import {Http, Response} from "@angular/http";
+import {Component, OnInit} from "@angular/core";
+import {AuthenticationService} from "./authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app',
@@ -12,11 +13,11 @@ import {Http, Response} from "@angular/http";
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['']">Home</a></li>
-                <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['sign-in']">Sign In</a></li>
-                <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['sign-up']">Sign Up</a></li>
-                <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['account']">Account</a></li>
+                <li *ngIf="!authenticationService.isAuthenticated" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['sign-in']">Sign In</a></li>
+                <li *ngIf="!authenticationService.isAuthenticated" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['sign-up']">Sign Up</a></li>
+                <li *ngIf="authenticationService.isAuthenticated" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a [routerLink]="['account']">Account</a></li>
             </ul>
-            <form class="navbar-form navbar-right" (ngSubmit)="signOut()">
+            <form class="navbar-form navbar-right" (ngSubmit)="signOut()" *ngIf="authenticationService.isAuthenticated">
                 <fieldset [disabled]="wip">
                     <div class="form-group">
                         <button type="submit" class="btn btn-default">Sign Out</button>
@@ -31,24 +32,23 @@ import {Http, Response} from "@angular/http";
 </div>
 `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     wip: boolean;
 
-    constructor(private http: Http) {
+    constructor(
+        private router: Router,
+        private authenticationService: AuthenticationService) {
+    }
+
+    async ngOnInit(): Promise<void> {
+        await this.authenticationService.check();
     }
 
     async signOut(): Promise<void> {
         this.wip = true;
         try {
-            const response = await this.http.post('/api/sign-out', null).toPromise();
-            console.log('Got successful response', response);
-        } catch(e) {
-            if (e instanceof Response) {
-                const response = <Response>e;
-                console.log('Got error response', response.status);
-            } else {
-                throw e;
-            }
+            await this.authenticationService.signOut();
+            this.router.navigate(['/']);
         } finally {
             this.wip = false;
         }
